@@ -1,0 +1,20 @@
+pandas==2.1.4
+python-dotenv==1.0.1
+
+wikipedia-api==0.6.0
+newsapi-python==0.2.7
+praw==7.7.1
+
+spacy==3.7.2
+torch==2.5.1
+transformers==4.35.2
+
+Flask==2.2.2
+Werkzeug==2.2.3
+ 
+# MongoDB
+pymongo[srv]==4.8.0
+
+# ASGI server & framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.0

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Reputation Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <i class="fa-solid fa-chart-line header-icon"></i>
+            <h1>Brand Reputation Analyzer</h1>
+            <p>Unlock insights from social media sentiment and brand perception.</p>
+        </header>
+
+        <main>
+            <section id="existing-companies">
+                <h2><i class="fa-solid fa-magnifying-glass-chart"></i> Explore Existing Dashboards</h2>
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search for a company...">
+                </div>
+                <div id="company-list" class="company-grid">
+                    </div>
+            </section>
+            
+            <section id="new-analysis">
+                <h2><i class="fa-solid fa-plus-circle"></i> Analyze a New Company</h2>
+                <form id="new-company-form">
+                    <div class="form-group">
+                        <label for="company-name-input">Company Name</label>
+                        <input type="text" id="company-name-input" placeholder="e.g., Tesla" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="keywords-input">Related Keywords (Optional)</label>
+                        <input type="text" id="keywords-input" placeholder="e.g., Elon Musk, Model 3, Cybertruck">
+                    </div>
+                    <button type="submit" class="btn-analyze">
+                        <i class="fa-solid fa-cogs"></i> Start Analysis
+                    </button>
+                </form>
+                <div id="loader" class="hidden">
+                    <div class="spinner"></div>
+                    <p id="loader-text">Starting analysis for [Company]... This may take several minutes.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+</body>
+</html>

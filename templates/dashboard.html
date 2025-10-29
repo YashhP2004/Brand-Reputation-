@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company_name }} | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+            <h1 id="company-title">{{ company_name }} Dashboard</h1>
+        </header>
+        <main class="dashboard-grid">
+            <div class="card card-large">
+                <h3><i class="fa-solid fa-chart-pie"></i> Sentiment Breakdown</h3>
+                <div class="chart-wrapper">
+                    <canvas id="sentiment-chart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-cloud"></i> Top Keywords</h3>
+                <div id="word-cloud" class="chart-wrapper"></div>
+            </div>
+            <div class="card">
+                <h3><i class="fa-solid fa-sitemap"></i> Perception Themes</h3>
+                <div id="treemap" class="chart-wrapper"></div>
+            </div>
+            <div class="card card-full">
+                <h3><i class="fa-solid fa-comments"></i> Recent Mentions</h3>
+                <div class="tabs">
+                    <button class="tab-link active" onclick="openTab(event, 'News')">News</button>
+                    <button class="tab-link" onclick="openTab(event, 'Reddit')">Reddit</button>
+                    <button class="tab-link" onclick="openTab(event, 'Twitter')">Twitter</button>
+                </div>
+                <div id="News" class="tab-content active">
+                    <div class="table-wrapper" id="news-table"></div>
+                </div>
+                <div id="Reddit" class="tab-content">
+                    <div class="table-wrapper" id="reddit-table"></div>
+                </div>
+                <div id="Twitter" class="tab-content">
+                     <div class="table-wrapper" id="twitter-table"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const companyId = "{{ company_id }}";
+        
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+    <script src="{{ url_for('static', path='js/dashboard.js') }}"></script>
+</body>
+</html>
