@@ -14,6 +14,7 @@ Werkzeug==2.2.3
  
 # MongoDB
 pymongo[srv]==4.8.0
+certifi>=2024.2.2
 
 # ASGI server & framework
 fastapi==0.115.5

@@ -4,7 +4,8 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+# Use override=True so a stale system/user env var doesn't shadow .env
+load_dotenv(override=True)
 
 # Wikipedia Settings
 WIKI_USER_AGENT = os.getenv("WIKI_USER_AGENT")
@@ -25,4 +26,4 @@ TWITTER_LIMIT = int(os.getenv("TWITTER_LIMIT", "100"))
 
 # MongoDB Settings
 MONGODB_URI = os.getenv("MONGODB_URI")
-MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "brand_reputation")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "brand_analyzer")

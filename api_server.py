@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 
 import db
@@ -10,6 +11,15 @@ from main import run_analysis
 
 
 app = FastAPI(title="Brand Reputation Analyzer API")
+
+# CORS for Vite dev server and common localhost origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all during local dev to avoid CORS blocking
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -213,22 +223,28 @@ async def analysis_status(company_id: str):
 
 @app.get("/api/health")
 async def api_health():
-    status: Dict[str, Any] = { 'mongo': 'disabled' }
-    if db.is_enabled():
-        try:
+    info: Dict[str, Any] = { 'mongo': 'disabled' }
+    try:
+        ds = db.get_status()
+        info.update({
+            'uri_present': ds.get('uri_present'),
+            'db_name': ds.get('db_name'),
+            'last_error': ds.get('last_error')
+        })
+        if db.is_enabled():
             database = db.get_db()
-            status['mongo'] = 'connected' if database is not None else 'error'
+            info['mongo'] = 'connected' if database is not None else 'error'
             stats: Dict[str, Any] = {}
             for name in ['company_profiles', 'companies', 'mentions', 'sentiments', 'news_mentions', 'reddit_mentions', 'twitter_mentions', 'keywords', 'themes']:
                 try:
                     col = db.get_collection(name)
                     stats[name] = col.estimated_document_count() if col is not None else 0
-                except Exception:
-                    stats[name] = 'err'
-            status['counts'] = stats
-        except Exception:
-            status['mongo'] = 'error'
-    return JSONResponse(status)
+                except Exception as e:
+                    stats[name] = f'err: {type(e).__name__}'
+            info['counts'] = stats
+    except Exception as e:
+        info['error'] = f'{type(e).__name__}: {e}'
+    return JSONResponse(info)
 
 
 @app.get("/api/sentiment/{company_id}")
